@@ -15,11 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.prueba.galery.AppExecutors
 import com.prueba.galery.databinding.CameraFragmentBinding
-import com.prueba.galery.viewmodel.NavViewModel
 import dagger.android.support.AndroidSupportInjection
 import java.io.File
 import javax.inject.Inject
-import com.prueba.galery.R
 
 class CameraFragment : Fragment(), LifecycleOwner {
 
@@ -31,10 +29,6 @@ class CameraFragment : Fragment(), LifecycleOwner {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val  viewModel: CameraViewModel by viewModels {
-        viewModelFactory
-    }
-
-    private  val navViewModel: NavViewModel by viewModels {
         viewModelFactory
     }
 
@@ -103,7 +97,6 @@ class CameraFragment : Fragment(), LifecycleOwner {
         imageCapture.takePicture(file, appExecutors.diskIO(),
             object : ImageCapture.OnImageSavedListener {
                 override fun onImageSaved(file: File) {
-                    val msg = "Photo capture succeeded: ${file.absolutePath}"
                     findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToPhotoFragment(file.absolutePath))
                     /*binding.viewFinder.post {
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()

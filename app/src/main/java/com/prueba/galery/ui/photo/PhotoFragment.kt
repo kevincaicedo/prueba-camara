@@ -6,13 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.prueba.galery.AppExecutors
 
 import com.prueba.galery.databinding.PhotoFragmentBinding
 import dagger.android.support.AndroidSupportInjection
+import java.io.File
 import javax.inject.Inject
 
 class PhotoFragment : Fragment() {
@@ -58,6 +61,14 @@ class PhotoFragment : Fragment() {
     fun cancelAction(){
         binding.button4.setOnClickListener {
 
+            val file = File(args.imagePath)
+            val deleted: Boolean = file.delete()
+
+            if(deleted) {
+                findNavController().popBackStack(PhotoFragmentDirections.actionPhotoFragmentToMenuFragment().actionId, true)
+                findNavController().navigate(PhotoFragmentDirections.actionPhotoFragmentToMenuFragment())
+            } else
+                Toast.makeText(context, "No se pudo eliminar la imagen", Toast.LENGTH_LONG).show()
         }
     }
 
