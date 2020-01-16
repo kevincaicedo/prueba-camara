@@ -1,6 +1,7 @@
 package com.prueba.galery.ui.menu
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,16 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.prueba.galery.R
 import com.prueba.galery.databinding.MenuFragmentBinding
-import com.prueba.galery.viewmodel.NavViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -38,40 +36,35 @@ class MenuFragment : Fragment() {
         viewModelFactory
     }
 
-    private  val navViewModel: NavViewModel by viewModels {
-        viewModelFactory
-    }
+    private lateinit var binding: MenuFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: MenuFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.menu_fragment, container, false)
+        binding = MenuFragmentBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
-        binding.navviewmodel = navViewModel
-
-        binding.cameraDirection = R.id.action_menuFragment_to_cameraFragment
-        binding.listDirection = R.id.action_menuFragment_to_listFragment
 
         return binding.root
     }
 
-    fun setupBiding(){
-        navViewModel.getDestination()?.observe(this, Observer {
-            if(it != MenuFragmentDirections.actionMenuFragmentToCameraFragment().actionId)
-                navToDestination(it)
-            else if(checkOrRequestPermission(activity!!, REQUEST_CAMERA))
-                navToDestination(it)
-        })
+    fun setupOnAction(){
+        binding.button2.setOnClickListener {
+            navToDestination(MenuFragmentDirections.actionMenuFragmentToListFragment().actionId)
+        }
+        binding.button.setOnClickListener {
+            if(checkOrRequestPermission(activity!!, REQUEST_CAMERA))
+                navToDestination(MenuFragmentDirections.actionMenuFragmentToCameraFragment().actionId)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupBiding()
+        setupOnAction()
     }
 
     fun navToDestination(destinationId: Int){
-        findNavController().navigate(destinationId, null)
+        findNavController().navigate(destinationId)
     }
 
     override fun onAttach(context: Context) {
