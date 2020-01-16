@@ -3,7 +3,6 @@ package com.prueba.galery.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.prueba.galery.di.qualifier.ViewModelKey
-import com.prueba.galery.di.scope.ApplicationScope
 import com.prueba.galery.ui.camera.CameraViewModel
 import com.prueba.galery.ui.form.FormViewModel
 import com.prueba.galery.ui.list.ListViewModel
@@ -11,9 +10,11 @@ import com.prueba.galery.ui.menu.MenuViewModel
 import com.prueba.galery.ui.photo.PhotoViewModel
 import com.prueba.galery.ui.view.ViewViewModel
 import com.prueba.galery.viewmodel.AppViewModelFactory
+import com.prueba.galery.viewmodel.NavViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 @Module
 abstract class ViewModelModule {
@@ -47,6 +48,12 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ViewViewModel::class)
     abstract fun bindViewViewModel(viewViewModel: ViewViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @Singleton
+    @ViewModelKey(NavViewModel::class)
+    abstract fun bindNavViewModel(navViewModel: NavViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: AppViewModelFactory): ViewModelProvider.Factory
