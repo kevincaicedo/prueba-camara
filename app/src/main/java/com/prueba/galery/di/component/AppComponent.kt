@@ -5,20 +5,23 @@ import com.prueba.galery.GaleryApp
 import com.prueba.galery.di.module.AppModule
 import com.prueba.galery.di.module.FragmentBuildersModule
 import com.prueba.galery.di.module.ViewModelModule
-import com.prueba.galery.di.scope.ApplicationScope
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
-import dagger.android.AndroidInjector
+import javax.inject.Singleton
 
-@ApplicationScope
+@Singleton
 @Component(
     modules = [
         AndroidInjectionModule::class,
-        AppModule::class
+        AppModule::class,
+        ViewModelModule::class,
+        FragmentBuildersModule::class
     ]
 )
-interface AppComponent: AndroidInjector<GaleryApp> {
+interface AppComponent {
+
+    fun inject(galeryApp: GaleryApp)
 
     @Component.Builder
     interface Builder {
